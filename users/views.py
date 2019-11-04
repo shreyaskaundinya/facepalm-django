@@ -5,11 +5,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth import authenticate, login, logout
 import urllib
-# import urllib2
 import json
 from django.db import connection
-
-# Create your views here.
 
 
 def log_login(user):
@@ -31,9 +28,7 @@ def Login(request):
             data = request.POST
             username = data['username']
             password = data['password']
-            # print(username, password)
             user = authenticate(request, username=username, password=password)
-            # print(user)
             if user is not None:
                 login(request, user)
                 # Redirect to a success page.
@@ -87,14 +82,14 @@ def Signup(request):
 def Profile(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
-            print("LOL", request.POST.keys())
+
             if 'view_followers' in request.POST.keys():
-                print("VIEW FOLLOWERS")
+
                 return redirect('followers', username=request.POST['username'])
             else:
                 pass
             if 'view_following' in request.POST.keys():
-                print("VIEW FOLLOWING")
+
                 return redirect('following', username=request.POST['username'])
             else:
                 pass
@@ -110,8 +105,6 @@ def Profile(request):
                 return redirect('profile')
             else:
                 pass
-            
-    
 
         else:
             user = request.user
@@ -119,22 +112,25 @@ def Profile(request):
             user_profile_picture = user_profile.picture
             user_profile_picture_url = user_profile_picture.url
             user_pp_clean = user_profile_picture_url[7:]
+            user_posts = p_models.Post.objects.all().filter(user_profile=user_profile)
             user = request.user
-            # for every user's id in Django User Model the UserProfile has user's id +1
-            user_id = user.id #changed
+            user_id = user.id  # changed
             cursor = connection.cursor()
-            print(user_id)
+
             cursor.execute(
                 'select count(user_follower_id) from users_following where user_following_id = {}'.format(user_profile.id))
             count_following = int((cursor.fetchone()[0]))  # 1 for test1
-            print(count_following)
+
             cursor.execute(
                 'select count(user_following_id) from users_following where user_follower_id = {}'.format(user_profile.id))
             count_follower = int((cursor.fetchone()[0]))
-            # for i in count_
-            return render(request, 'profile.html', {'User': user, 'UserProfile': user_profile, 'UserProfilePictureurl': user_pp_clean, 'count_follower': count_follower, 'count_following': count_following})
+
+            if user_posts:
+                return render(request, 'profile.html', {'User': user, 'UserProfile': user_profile, 'UserProfilePictureurl': user_pp_clean, 'count_follower': count_follower, 'count_following': count_following, 'posts': user_posts})
+            else:
+                return render(request, 'profile.html', {'User': user, 'UserProfile': user_profile, 'UserProfilePictureurl': user_pp_clean, 'count_follower': count_follower, 'count_following': count_following, 'error': 'You have no posts.'})
     else:
-        print("SO SAD")
+
         return render(request, 'login212.html')
 
 
@@ -146,13 +142,7 @@ def UserProfile(request, username):
         logged_in_user = u_models.UserProfile.objects.get(user=current_user)
         user = User.objects.get(username=username)
         followed_account = u_models.UserProfile.objects.get(user=user)
-        # print(logged_in_user.user.username,followed_account.user.username, current_user.username)
-        '''
-        - get the User model object using the username from the html
-        - get the UserProfile object using the User object
-        - create the new Following object
-        - save it
-        '''
+
         if username != current_user.username:
             if "follow" in data.keys():
                 '''
@@ -186,23 +176,25 @@ def UserProfile(request, username):
         user_posts = p_models.Post.objects.all().filter(user_profile=user_profile)
         following = u_models.Following.objects.all().filter(
             user_following=logged_in_user, user_follower=user_profile)
-        # for every user's id in Django User Model the UserProfile has user's id +1
-        current_user_id = user.id #changed
-        current_user_profile = u_models.UserProfile.objects.get(user=current_user)
+        current_user_id = user.id  # changed
+        current_user_profile = u_models.UserProfile.objects.get(
+            user=current_user)
         cursor = connection.cursor()
-        # print(user_id)
+
         cursor.execute(
             'select count(user_follower_id) from users_following where user_following_id = {}'.format(current_user_profile.id,))
-        count_following = int((cursor.fetchone()[0]))  # 1 for test1
-        # print(count_following)
+        count_following = int((cursor.fetchone()[0]))
+
         cursor.execute(
             'select count(user_following_id) from users_following where user_follower_id = {}'.format(current_user_profile.id))
         count_follower = int((cursor.fetchone()[0]))
-        # for i in count_
+
         if following is None:
             return render(request, 'profile.html', {'User': user, 'UserProfile': user_profile, 'UserProfilePictureurl': user_pp_clean, 'count_follower': count_follower, 'count_following': count_following, 'following': ''})
-        # print(user_post.user_profile.picture.url, user_pp_clean)
-        return render(request, 'profile.html', {'User': user, 'UserProfile': user_profile, 'UserProfilePictureurl': user_pp_clean, 'count_follower': count_follower, 'count_following': count_following, 'following': following})
+        if user_posts:
+            return render(request, 'profile.html', {'User': user, 'UserProfile': user_profile, 'UserProfilePictureurl': user_pp_clean, 'count_follower': count_follower, 'count_following': count_following, 'following': following, 'posts': user_posts})
+        else:
+            return render(request, 'profile.html', {'User': user, 'UserProfile': user_profile, 'UserProfilePictureurl': user_pp_clean, 'count_follower': count_follower, 'count_following': count_following, 'following': following, 'error': 'You have no posts.'})
 
 
 def Settings(request):
@@ -227,7 +219,7 @@ def Settings(request):
 
                 return redirect('settings')
         if 'change_pp' in data.keys():
-            print(request.POST)
+
             new_image = request.FILES.get('image', False)
             user_profile.picture = new_image
             user_profile.save()
@@ -238,13 +230,11 @@ def Settings(request):
             new_password1 = data['newpwd1']
             if new_password == new_password1:
                 old_password = data['oldpwd']
-                # print(new_password, new_password1, old_password)
                 if check_password(old_password, user_object.password):
                     new_password_hashed = make_password(new_password)
                     user_object.password = new_password_hashed
                     user_object.save()
                     return redirect('login')
-                    # return render(request, 'settings.html', {'password_error': 'Current password entered is wrong.'})
 
                 else:
                     return render(request, 'settings.html', {'password_error': 'Current password entered is wrong.'})
@@ -270,7 +260,6 @@ def Settings(request):
         user_profile_picture = user_profile.picture
         user_profile_picture_url = user_profile_picture.url
         user_pp_clean = user_profile_picture_url[7:]
-        # print(user_profile_picture.user.user.username,user_profile_picture.image.url)
         return render(request, 'settings.html', {'User': user, 'UserProfile': user_profile, 'UserProfilePictureurl': user_pp_clean})
 
 
@@ -292,8 +281,7 @@ def Search(request):
                 for j in i:
                     all_user_ids.append(j)
 
-            all_user_ids = tuple(all_user_ids)  # ('facepalm','fac','faculty')
-            # print(all_user_ids)
+            all_user_ids = tuple(all_user_ids)
             if len(all_user_ids) == 1:
                 id_of_one = int(all_user_ids[0])
                 all_user_profiles = u_models.UserProfile.objects.raw(
@@ -301,9 +289,6 @@ def Search(request):
             else:
                 all_user_profiles = u_models.UserProfile.objects.raw(
                     "select * from users_userprofile where user_id in {}".format(all_user_ids))
-            '''for i in all_user_profiles:
-                print(i.user.username)
-                print(i.birth_date)'''
 
             # NEED TO GET THE INFO IF THE SEARCHED USER IS FOLLOWED BY LOGGED IN USER
             user = u_models.User.objects.get(id=request.user.id)
@@ -316,7 +301,6 @@ def Search(request):
                 following_user_ids.append(i[0])
             following_user_ids = tuple(following_user_ids)
 
-            # print(following_user_ids)
             return render(request, 'search.html', {'users': all_user_profiles, 'following_users': following_user_ids})
         else:
             current_user = request.user
@@ -348,7 +332,8 @@ def Search(request):
     else:
         return render(request, 'search.html')
 
-def Following(request,username):
+
+def Following(request, username):
     if request.method == 'POST':
         data = request.POST
         current_user = request.user
@@ -391,26 +376,26 @@ def Following(request,username):
         loggedin_user_following_ids = tuple(loggedin_user_following_ids)
         user_object = User.objects.get(username=username)
         user_profile = u_models.UserProfile.objects.get(user=user_object)
-        print(user_object.id)
         cursor.execute(
-                'select user_follower_id from users_following where user_following_id = %s', (user_profile.id,))
+            'select user_follower_id from users_following where user_following_id = %s', (user_profile.id,))
         following_users = cursor.fetchall()
         following_user_ids = []
         for i in following_users:
             following_user_ids.append(i[0])
         following_user_ids = tuple(following_user_ids)
-        print(following_user_ids)
-        
+
         if len(following_user_ids) == 1:
             id_of_one = int(following_user_ids[0])
-            following_user_profiles = u_models.UserProfile.objects.raw('select * from users_userprofile where id = {}'.format(id_of_one,))
+            following_user_profiles = u_models.UserProfile.objects.raw(
+                'select * from users_userprofile where id = {}'.format(id_of_one,))
         else:
-            following_user_profiles = u_models.UserProfile.objects.raw('select * from users_userprofile where id in {}'.format(following_user_ids,))
-        return render(request, 'view_accounts.html', {'users': following_user_profiles, 'following_users':loggedin_user_following_ids})
+            following_user_profiles = u_models.UserProfile.objects.raw(
+                'select * from users_userprofile where id in {}'.format(following_user_ids,))
+        return render(request, 'view_accounts.html', {'users': following_user_profiles, 'following_users': loggedin_user_following_ids})
     # get user profiles whom user is following
 
 
-def Followers(request,username):
+def Followers(request, username):
     if request.method == 'POST':
         data = request.POST
         current_user = request.user
@@ -445,7 +430,7 @@ def Followers(request,username):
             user=current_user)
         cursor = connection.cursor()
         cursor.execute(
-            'select user_follower_id from users_following where user_following_id = %s',(logged_in_user.id,))
+            'select user_follower_id from users_following where user_following_id = %s', (logged_in_user.id,))
         loggedin_user_following = cursor.fetchall()
         loggedin_user_following_ids = []
         for i in loggedin_user_following:
@@ -453,26 +438,18 @@ def Followers(request,username):
         loggedin_user_following_ids = tuple(loggedin_user_following_ids)
         user_object = User.objects.get(username=username)
         user_profile = u_models.UserProfile.objects.get(user=user_object)
-        print(user_object.id)
         cursor.execute(
-                'select user_following_id from users_following where user_follower_id = %s',(user_profile.id,))
+            'select user_following_id from users_following where user_follower_id = %s', (user_profile.id,))
         follower_users = cursor.fetchall()
         follower_user_ids = []
         for i in follower_users:
             follower_user_ids.append(i[0])
         follower_user_ids = tuple(follower_user_ids)
-        print(follower_user_ids)
         if len(follower_user_ids) == 1:
             id_of_one = int(follower_user_ids[0])
-            follower_user_profiles = u_models.UserProfile.objects.raw('select * from users_userprofile where id = {}'.format(id_of_one,))
+            follower_user_profiles = u_models.UserProfile.objects.raw(
+                'select * from users_userprofile where id = {}'.format(id_of_one,))
         else:
-            follower_user_profiles = u_models.UserProfile.objects.raw('select * from users_userprofile where id in {}'.format(follower_user_ids,))
-        return render(request, 'view_accounts.html', {'users': follower_user_profiles,'following_users':loggedin_user_following_ids})
-    # get user profiles whom user is followed by
-
-    # facepalm0069@gmail.com
-    # pwd=samshnik
-    # https://www.freenom.com/en/freeandpaiddomains.html
-
-
-# if_following = select user_follower_id from users_following where user = (user_id)
+            follower_user_profiles = u_models.UserProfile.objects.raw(
+                'select * from users_userprofile where id in {}'.format(follower_user_ids,))
+        return render(request, 'view_accounts.html', {'users': follower_user_profiles, 'following_users': loggedin_user_following_ids})

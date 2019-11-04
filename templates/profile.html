@@ -42,7 +42,7 @@
             margin-bottom: 3vw;
         }
         .user-profile-header {
-            height: 55vw;
+            height: 75vw;
             width: 100%;
             background-image: linear-gradient(#080708, #3b5668, #accbe1);
             color: #f0eff4;
@@ -72,6 +72,13 @@
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             grid-template-rows: 30px 40px;
+        }
+
+        .user-profile-header-account-details {
+            padding-top: 2vw;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+
         }
 
         .user-profile-header-details-numbers {
@@ -295,25 +302,31 @@
 
                     <div class="user-profile-header-details">
                         <p class="user-profile-header-details-heads">
-                            <form action="{% url 'profile' %}" method="post">
-                                {% csrf_token %}
-                                <input type='text' name='username' value={{User.username}} hidden>
-                                <input type='text' name='view_followers' value='' hidden>
-                                <button type="submit">Followers</button>
-                            </form>
+                            Followers
+                            
                         </p>
                         <p class="user-profile-header-details-numbers">{{ count_follower}}</p>
                         <p class="user-profile-header-details-heads">
-                            <form action="{% url 'profile' %}" method="post">
-                                {% csrf_token %}
-                                <input type='text' name='username' value={{User.username}} hidden>
-                                <input type='text' name='view_following' value='' hidden>
-                                <button type="submit">Following</button>
-                            </form>
+                            Followings
+                            
                         </p>
                         <p class="user-profile-header-details-numbers">{{count_following}}</p>
                         <!---<p class="user-profile-header-details-heads">Likes</p>
                         <p class="user-profile-header-details-numbers">300</p>--->
+                    </div>
+                    <div class="user-profile-header-account-details mx-auto">
+                        <form action="{% url 'profile' %}" method="post">
+                            {% csrf_token %}
+                            <input type='text' name='username' value={{User.username}} hidden>
+                            <input type='text' name='view_followers' value='' hidden>
+                            <button type="submit" class="btn btn-info">Followers Accounts</button>
+                        </form>
+                        <form action="{% url 'profile' %}" method="post">
+                            {% csrf_token %}
+                            <input type='text' name='username' value={{User.username}} hidden>
+                            <input type='text' name='view_following' value='' hidden>
+                            <button type="submit" class="btn btn-info">Following Accounts</button>
+                        </form>
                     </div>
                 </div>
                 <div class="user-profile-body container-fluid">
@@ -365,6 +378,9 @@
                 </div>
                 {% endfor %}
             </div>
+            {% if error %}
+            <h4>{{error}}<h4>
+            {% endif %}
         </div>
 
         <script
