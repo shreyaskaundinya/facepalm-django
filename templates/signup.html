@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Register!</title>
+        <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+            integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+            crossorigin="anonymous"
+        />
+        <link
+            href="https://fonts.googleapis.com/icon?family=Material+Icons"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css?family=ZCOOL+KuaiLe&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+    <style>
+        .button-container {
+            display: flex;
+            width: 100%;
+            justify-content: center;
+        }
+        .brand {
+            font-size: 3rem;
+            font-family: "ZCOOL KuaiLe", cursive;
+            color: #080708;
+        }
+        .login-form-heading {
+            font-size: 2em;
+        }
+    </style>
+    <body>
+        <p class="text-center brand mt-5">FACEPALM</p>
+
+        <div class="container-fluid">
+            <form
+                class="form-group mx-auto w-50"
+                action="{% url 'signup' %}"
+                method="POST"
+            >
+                {% csrf_token %}
+                <!--{{ form.as_p }}
+                
+                <script src="https://www.google.com/recaptcha/api.js?render=6LeFvbkUAAAAANtmi0iNbaY5M6aFVaGEIDtScr9P"></script>
+                <script>
+                    grecaptcha.ready(function() {
+                        grecaptcha.execute('6LeFvbkUAAAAANtmi0iNbaY5M6aFVaGEIDtScr9P', {action: 'homepage'}).then(function(token) {
+                        ...
+                        });
+                    });
+                </script>
+                <div
+                    class="g-recaptcha"
+                    data-sitekey="6LeFvbkUAAAAANtmi0iNbaY5M6aFVaGEIDtScr9P"
+                ></div>-->
+                <p class="login-form-heading text-center">SIGN-UP</p>
+                <br />
+                <label for="username">Username:</label>
+                <input
+                    type="text"
+                    name="username"
+                    id="username"
+                    class="form-control"
+                    required
+                />
+                <br />
+                <label for="email">Email:</label>
+                <input
+                    type="text"
+                    name="email"
+                    id="email"
+                    class="form-control"
+                    required
+                />
+                <br />
+                <label for="password">Password:</label>
+                <input
+                    type="password"
+                    name="password"
+                    id="password"
+                    class="form-control"
+                    required
+                />
+                <br />
+                <label for="password">Re-enter Password:</label>
+                <input
+                    type="password"
+                    name="password1"
+                    id="password1"
+                    class="form-control"
+                    required
+                />
+                <br />
+                <label for="dob">Date of Birth:</label>
+                <input
+                    type="date"
+                    name="dob"
+                    id="dob"
+                    class="form-control"
+                    required
+                />
+                <br />
+                <label for="contact">Contact:</label>
+                <input
+                    type="number"
+                    name="contact"
+                    id="contact"
+                    class="form-control"
+                    required
+                />
+                <br />
+                <div class="button-container mt-4">
+                    <input
+                        type="submit"
+                        value="Register"
+                        class="btn btn-outline-primary"
+                    />
+                </div>
+            </form>
+            {% block footer %} {%endblock %}
+        </div>
+    </body>
+</html>

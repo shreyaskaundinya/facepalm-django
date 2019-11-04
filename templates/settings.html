@@ -1,0 +1,255 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+{% load from_index %}
+{% block style %}
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        outline: none;
+    }
+
+    .navbar {
+        border-bottom: 3px solid #2c4251;
+    }
+
+    .navbar-brand {
+        color: #080708;
+        font-family: "ZCOOL KuaiLe", cursive;
+        font-size: 1.5rem;
+    }
+
+    .navbar-toggler {
+        border: none;
+        outline: none;
+    }
+
+    .navbar-toggler-icon {
+        cursor: pointer;
+    }
+    .navbar-icon {
+        font-size: 20px;
+        margin-right: 8px;
+    }
+    .nav-item {
+        color: #080708;
+        padding: 2px;
+    }
+
+    .log-btn {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+    }
+    .form-header {
+        font-size: 1.3em;
+        border-bottom: 1px solid lightgray;
+    }
+    .form-group {
+        margin-top: 2vw;
+    }
+    .header {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        margin-top: 5vw;
+        margin-bottom: 3vw;
+    }
+    input {
+        margin: 0 1vw 0 1vw;
+    }
+    .user-profile-picture {
+        border-radius: 50%;
+        width: 20vw;
+        height: 20vw;
+        border: 5px solid #848fa5;
+    }
+
+    .footer {
+        width: 100%;
+        border-top: 5px solid #2c4251;
+        background-color: #080708;
+        color: #f0eff4;
+        padding: 1vw;
+        display: flex;
+        justify-content: center;
+    }
+{% endblock style %}
+        
+{% block content %}
+<!--  1. Name
+    2. Username
+    3. Password/Recheck
+    4. Account Type
+    5. Deactivate
+        a. Password
+    6. Delete
+        a. Password
+    7. Block Users
+-->
+
+<div class="container-fluid">
+    <div class="header">
+        <h1>Settings</h1>
+    </div>
+    <p class="form-header">Change Username</p>
+    <p>Current Username : {{ User.username }}</p>
+    <form action="#" method="POST" class="form-group form-inline">
+        {% csrf_token %}
+        <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            class="form-control"
+        />
+        <button
+            type="submit"
+            name="change_username"
+            class="btn m-2 btn-success"
+        >
+            Change Username
+        </button>
+        {% if username_error %}
+        <p>{{ username_error }}</p>
+        {% endif %}
+    </form>
+    <p class="form-header">Change Profile Picture</p>
+    {% with UserProfile.picture.url|from_index:7 as source %}
+        <img
+            class="user-profile-picture m-2"
+            src="{% static source %}"
+            alt="profile_pic"
+            id="profile_pic"
+        />
+    {% endwith %}
+    <form
+        action="{% url 'settings' %}"
+        method="POST"
+        class="form-group form-inline"
+        enctype="multipart/form-data"
+    >
+        {% csrf_token %}
+        <input
+            type="file"
+            name="image"
+            id="image"
+            class="form-control-file"
+        />
+        <button
+            type="submit"
+            name="change_pp"
+            class="btn m-2 btn-success"
+        >
+            Change Profile Picture
+        </button>
+        {% if pp_error %}
+        <p>{{ pp_error }}</p>
+        {% endif %}
+    </form>
+    <p class="form-header">Change Password</p>
+    <form action="#" method="POST" class="form-group form-inline">
+        {% csrf_token %}
+        <input
+            type="password"
+            name="oldpwd"
+            placeholder="Old password"
+            class="form-control"
+        />
+        <input
+            type="password"
+            name="newpwd"
+            placeholder="new password"
+            class="form-control"
+        />
+        <input
+            type="password"
+            name="newpwd1"
+            placeholder=" Re- enter Password"
+            class="form-control"
+        />
+        <button
+            type="submit"
+            name="change_password"
+            class="btn m-2 btn-success"
+        >
+            Change Password
+        </button>
+        {% if password_error %}
+        <p>{{ password_error }}</p>
+        {% endif %}
+    </form>
+    <!--
+    <p>Current Account Type: Account type</p>
+    <p class="form-header">Change Account Type</p>
+
+    <form action="#" method="POST" class="form-group form-inline">
+        <select
+            placehoder="Account type"
+            name="account-type"
+            class="form-control"
+        >
+            <option
+                chan=""
+                class="form-control"
+                disabled
+                selected
+                hidden
+                >Account type
+            </option>
+            <option class="form-control" value="Personal"
+                >Personal
+            </option>
+            <option class="form-control" value="Business"
+                >Business</option
+            >
+        </select>
+        
+        <input
+            type="password"
+            name="account-type-password"
+            placeholder="password"
+            class="form-control"
+        />
+        <input
+            type="submit"
+            value="change_account_type"
+            class="btn m-2 btn-primary"
+        />
+    -->
+    <p class="form-header">Deactivate Account</p>
+    <form action="#" method="POST" class="form-group form-inline">
+        {% csrf_token %}
+        <input
+            type="password"
+            name="deactivate_password"
+            placeholder="Password"
+            class="form-control"
+        />
+        <button
+            type="submit"
+            name="deactivate_account"
+            class="btn m-2 btn-success"
+        >
+            Deactivate Account
+        </button>
+    </form>
+    <p class="form-header">Delete Account</p>
+    <form action="#" method="POST" class="form-group form-inline">
+        {% csrf_token %}
+        <input
+            type="password"
+            name="delete_password"
+            placeholder="Password"
+            class="form-control"
+        />
+        <button
+            type="submit"
+            name="delete_account"
+            class="btn m-2 btn-success"
+        >
+            Delete Account
+        </button>
+    </form>
+</div>
+
+{% endblock content %}

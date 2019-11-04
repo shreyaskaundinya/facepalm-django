@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Home</title>
+        <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+            integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+            crossorigin="anonymous"
+        />
+        <link
+            href="https://fonts.googleapis.com/icon?family=Material+Icons"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css?family=ZCOOL+KuaiLe&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+    <!-- display: grid; justify-items: center; width: 30vw; -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            outline: none;
+            overflow-x: hidden;
+        }
+
+        .login-form-wrapper {
+            display: grid;
+            width: 100vw;
+            justify-content: center;
+            padding-top: 5vw;
+            padding-bottom: 5vw;
+        }
+
+        .login-form-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            color: #080708;
+            font-family: "ZCOOL KuaiLe", cursive;
+            font-size: 3rem;
+        }
+
+        .navbar-brand:hover {
+            color: #080708;
+            font-family: "ZCOOL KuaiLe", cursive;
+            font-size: 3rem;
+        }
+
+        .login-form-logo {
+            width: 30vw;
+            height: 30vw;
+        }
+
+        .login-form {
+            width: 30vw;
+            display: grid;
+            justify-content: center;
+            justify-items: center;
+        }
+
+        .login-form-heading {
+            font-size: 2em;
+        }
+
+        .form-group {
+            width: inherit;
+        }
+
+        .btn {
+            width: 30vw;
+            margin: 3vh 0 3vh 0;
+        }
+
+        .footer {
+            width: 100%;
+            border-top: 5px solid #2c4251;
+            background-color: #080708;
+            color: #f0eff4;
+            padding: 1vw;
+            display: flex;
+            justify-content: center;
+            position: fixed;
+            bottom: 0;
+        }
+
+        @media screen and (max-width: 992px) and (min-width: 300px) {
+            .login-form-wrapper {
+                display: grid;
+                width: 100vw;
+                justify-content: center;
+                padding-top: 10vw;
+                padding-bottom: 10vw;
+            }
+
+            .login-form-header {
+            }
+
+            .navbar-brand {
+                color: #080708;
+                font-family: "ZCOOL KuaiLe", cursive;
+                font-size: 3rem;
+            }
+
+            .navbar-brand:hover {
+                color: #080708;
+                font-family: "ZCOOL KuaiLe", cursive;
+                font-size: 1.5rem;
+            }
+
+            .login-form-logo {
+                width: 70vw;
+                height: 70vw;
+            }
+
+            .login-form {
+                width: 70vw;
+                display: grid;
+                justify-content: center;
+                justify-items: center;
+            }
+
+            .login-form-heading {
+                font-size: 2em;
+            }
+
+            .form-group {
+                width: inherit;
+            }
+
+            .btn {
+                width: 70vw;
+                margin: 4vh 0 0 0;
+            }
+        }
+    </style>
+
+    <body>
+        <div class="login-form-wrapper">
+            <div class="login-form-header">
+                <p class="navbar-brand text-center">FACEPALM</p>
+                <br />
+            </div>
+            <div class="login-form">
+                <p class="login-form-heading">LOGIN</p>
+                <hr />
+                <form
+                    action="{% url 'login' %}"
+                    class="form-group"
+                    method="POST"
+                >
+                    {% csrf_token %}
+                    <label for="username">Username :</label>
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        class="form-control"
+                        required
+                    />
+
+                    <label for="password">Password:</label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        class="form-control"
+                        required
+                    />
+                    <button type="submit" class="btn btn-outline-success">
+                        Login
+                    </button>
+                </form>
+                <a href="{% url 'signup' %}">
+                    <button class="btn btn-outline-info">
+                        Sign-up
+                    </button>
+                </a>
+                <br />
+                <br />
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>Copyright - Facepalm</p>
+        </footer>
+
+        <script
+            src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"
+        ></script>
+    </body>
+</html>

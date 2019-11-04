@@ -1,0 +1,393 @@
+{% extends 'base.html' %}
+{% load static from staticfiles %} 
+{% load from_index %}
+
+
+    {% block style %}
+    * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .navbar {
+            border-bottom: 3px solid #2c4251;
+        }
+
+        .navbar-brand {
+            color: #080708;
+            font-family: "ZCOOL KuaiLe", cursive;
+            font-size: 1.5rem;
+        }
+
+        .nav-item {
+            color: #080708;
+            padding: 2px;
+        }
+
+        .log-btn {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+        }
+
+        .header {
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            margin-bottom: 3vw;
+        }
+        .profile {
+            margin-bottom: 3vw;
+        }
+        .user-profile-header {
+            height: 55vw;
+            width: 100%;
+            background-image: linear-gradient(#080708, #3b5668, #accbe1);
+            color: #f0eff4;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .user-profile-header-image {
+            display: flex;
+            justify-content: center;
+        }
+
+        .user-profile-header-label {
+            display: flex;
+            justify-content: center;
+        }
+
+        .user-profile-header-follow {
+            display: flex;
+            justify-content: center;
+            border-bottom: 3px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .user-profile-header-details {
+            padding-top: 2vw;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: 30px 40px;
+        }
+
+        .user-profile-header-details-numbers {
+            grid-row: 2;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            font-size: 1.3em;
+        }
+        .user-profile-header-details-heads {
+            grid-row: 1;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            font-size: 1em;
+        }
+
+        .user-profile-picture {
+            border-radius: 50%;
+            width: 20vw;
+            height: 20vw;
+            border: 5px solid #848fa5;
+        }
+
+        .user-profile-name {
+            font-size: 2em;
+        }
+
+        .posts-heading-wrapper {
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            border-bottom: 1px solid rgba(132, 143, 165, 0.3);
+            margin-bottom: 3em;
+        }
+
+        .posts-heading {
+            font-size: 2.5em;
+        }
+        .post {
+            border: 2px solid #2c4251;
+            box-shadow: 0 3px 6px 0 rgba(172, 203, 225, 1);
+            border-radius: 5px;
+            margin-bottom: 3vw;
+        }
+
+        .post-header {
+            border-bottom: 2px solid #2c4251;
+        }
+
+        .post-profile {
+            text-decoration: none;
+            color: #2c4251;
+        }
+
+        .post-profile:hover {
+            text-decoration: none;
+            color: #2c4251;
+        }
+
+        .post-profile:focus {
+            text-decoration: none;
+            color: #2c4251;
+        }
+
+        .post-profile:active {
+            text-decoration: none;
+            color: #2c4251;
+        }
+
+        .post-username {
+            user-select: none;
+            font-size: 0.9em;
+            word-wrap: break-word;
+            word-break: break-all;
+        }
+
+        .post-username:hover {
+            cursor: pointer;
+        }
+
+        .post-user-profilepic {
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            border: 2px solid #848fa5;
+        }
+        .post-like {
+            border: none;
+            margin: none;
+            background-color: transparent;
+            float: right;
+            outline: none;
+            text-decoration: none;
+            color: black;
+        }
+
+        .post-comment {
+            border: none;
+            margin: none;
+            background-color: transparent;
+            float: right;
+            text-decoration: none;
+            color: black;
+        }
+
+        :-moz-any-link:focus {
+            outline: none;
+        }
+
+        .post-body {
+            margin: 3vw;
+            word-wrap: break-word;
+            word-break: keep-all;
+            user-select: text;
+        }
+
+        .post-body-heading {
+            font-size: 1.5em;
+            padding-bottom: 2vw;
+            border-bottom: 1px solid rgba(132, 143, 165, 0.3);
+        }
+
+        .post-body-date {
+            font-size: 12px;
+            color: rgba(132, 143, 165, 0.6);
+            display: flex;
+            width: 100%;
+            justify-content: flex-end;
+        }
+
+        .footer {
+            width: 100%;
+            border-top: 5px solid #2c4251;
+            background-color: #080708;
+            color: #f0eff4;
+            padding: 1vw;
+            display: flex;
+            justify-content: center;
+        }
+
+        @media screen and (max-width: 992px) and (min-width: 300px) {
+            .log-btn {
+                position: relative;
+                padding: 10px;
+            }
+        }
+
+        @media screen and (min-width: 992px) {
+            .user-profile-header-label {
+                padding-bottom: 4vw;
+            }
+
+            .user-profile-header-image {
+                padding-bottom: 4vw;
+            }
+            .user-profile-name {
+                font-size: 1.3em;
+            }
+        }
+    {% endblock style %}
+        
+    </style>
+
+    {% block content %}
+        <div class="profile-wrapper">
+            <div class="profile">
+                <div class="user-profile-header">
+                    <div class="user-profile-header-image">
+                        <br />
+                        <img
+                            src="{% static UserProfilePictureurl %}"
+                            alt="profile-picture"
+                            class="user-profile-picture mt-5"
+                            id="username-pp"
+                        />
+                    </div>
+                    <div class="user-profile-header-label">
+                        <label for="username-pp" class="user-profile-name">
+                            {{ User.username }}</label
+                        >
+                    </div>
+                    <div class="user-profile-header-follow pb-3">
+                        <!-- if the user already follows the other user - unfollow btn is shown -->
+                        {% if following %}
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type='text' name='username' value={{User.username}} hidden>
+                            <input type='text' name='unfollow' value='' hidden>
+                            <a
+                                data-toggle="tooltip"
+                                title="UnPalm Me"
+                                name="unfollow"
+                            >
+                                <button type="submit" class="btn btn-danger p-3">
+                                    <i class="material-icons">
+                                        pan_tool
+                                    </i>
+                                </button>
+                            </a>
+                        </form>
+                        {% else %}
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type='text' name='username' value={{User.username}} hidden>
+                            <input type='text' name='follow' value='' hidden>
+                            <a
+                                data-toggle="tooltip"
+                                title="Palm Me"
+                                name="follow"
+                            >
+                                <button type="submit" class="btn btn-info p-3">
+                                    <i class="material-icons">
+                                        pan_tool
+                                    </i>
+                                </button>
+                            </a>
+                        </form>
+                        {% endif %}
+                    </div>
+
+                    <div class="user-profile-header-details">
+                        <p class="user-profile-header-details-heads">
+                            <form action="{% url 'profile' %}" method="post">
+                                {% csrf_token %}
+                                <input type='text' name='username' value={{User.username}} hidden>
+                                <input type='text' name='view_followers' value='' hidden>
+                                <button type="submit">Followers</button>
+                            </form>
+                        </p>
+                        <p class="user-profile-header-details-numbers">{{ count_follower}}</p>
+                        <p class="user-profile-header-details-heads">
+                            <form action="{% url 'profile' %}" method="post">
+                                {% csrf_token %}
+                                <input type='text' name='username' value={{User.username}} hidden>
+                                <input type='text' name='view_following' value='' hidden>
+                                <button type="submit">Following</button>
+                            </form>
+                        </p>
+                        <p class="user-profile-header-details-numbers">{{count_following}}</p>
+                        <!---<p class="user-profile-header-details-heads">Likes</p>
+                        <p class="user-profile-header-details-numbers">300</p>--->
+                    </div>
+                </div>
+                <div class="user-profile-body container-fluid">
+                    <div class="user-profile-posts"></div>
+                </div>
+            </div>
+            <div class="post-wrapper container-fluid">
+                {% for post in posts %}
+                <div class="post">
+                    <div class="post-header">
+                        <a href="#profile" class="post-profile">
+                            <!-- fix this later -->
+                            <!--
+                                required url http://127.0.0.1:8000/static/default.png
+                                current url http://127.0.0.1:8000/static/static/default.png
+                                -->
+                            {% with post.user_profile.picture.url|from_index:7 as source %}
+                            <img
+                                class="post-user-profilepic m-2"
+                                src="{% static source %}"
+                                alt="profile_pic"
+                                id="profile_pic"
+                            />
+                            {% endwith %}
+                            <label class="post-username" for="profile_pic">{{post.user_profile.user.username}}</label>
+                        </a>
+                        <!-- <a class="post-like p-2" href="#liked">
+                            <i class="material-icons">favorite_border</i>
+                        </a>
+                        <a class="post-comment p-2" href="#commented">
+                            <i class="material-icons">chat_bubble_outline</i>
+                        </a>-->
+                    </div>
+                    <h1></h1>
+                    <div class="post-body">
+                        <p class="post-body-heading">
+                            {{ post.header }}
+                        </p>
+                        <p class="post-body-text">
+                            {{ post.text }}
+                        </p>
+                        <p class="post-body-link">
+                            <a href="{{ post.link }}">{{ post.link }}</a>
+                        </p>
+                        <p class="post-body-date">
+                            {{ post.timestamp }}
+                        </p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <script
+            src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"
+        ></script>
+        <script>
+            $(document).ready(function() {
+                $('[data-toggle="tooltip"]').tooltip();
+            });
+        </script>
+        <script>
+            console.log(document.getElementById("profile_pic").src);
+        </script>
+{% endblock content %}

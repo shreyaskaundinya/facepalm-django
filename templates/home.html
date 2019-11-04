@@ -1,0 +1,351 @@
+{% extends 'base.html' %} 
+{% load from_index %} 
+{% load static from staticfiles %}
+{% block title %} Home {% endblock title %}
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        outline: none;
+    }
+
+    .navbar {
+        border-bottom: 3px solid #2c4251;
+    }
+
+    .navbar-brand {
+        color: #080708;
+        font-family: "ZCOOL KuaiLe", cursive;
+        font-size: 1.5rem;
+    }
+
+    .navbar-toggler {
+        border: none;
+        outline: none;
+    }
+
+    .navbar-toggler-icon {
+        cursor: pointer;
+    }
+
+    .nav-item {
+        color: #080708;
+        padding: 2px;
+    }
+
+    .log-btn {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+    }
+
+    .feed-wrapper {
+        margin-top: 5vw;
+    }
+
+    .header {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 3vw;
+    }
+
+    .post {
+        border: 2px solid #2c4251;
+        box-shadow: 0 3px 6px 0 rgba(172, 203, 225, 1);
+        border-radius: 5px;
+        margin-bottom: 3vw;
+    }
+
+    .post-header {
+        border-bottom: 2px solid #2c4251;
+    }
+
+    .post-profile {
+        text-decoration: none;
+        color: #2c4251;
+    }
+
+    .post-profile:hover {
+        text-decoration: none;
+        color: #2c4251;
+    }
+
+    .post-profile:focus {
+        text-decoration: none;
+        color: #2c4251;
+    }
+
+    .post-profile:active {
+        text-decoration: none;
+        color: #2c4251;
+    }
+
+    .post-username {
+        user-select: none;
+        font-size: 0.9em;
+        word-wrap: break-word;
+        word-break: break-all;
+    }
+
+    .post-username:hover {
+        cursor: pointer;
+    }
+
+    .post-user-profilepic {
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        border: 2px solid #848fa5;
+    }
+    .post-like {
+        border: none;
+        margin: none;
+        background-color: transparent;
+        float: right;
+        outline: none;
+        text-decoration: none;
+        color: black;
+    }
+
+    .post-comment {
+        border: none;
+        margin: none;
+        background-color: transparent;
+        float: right;
+        text-decoration: none;
+        color: black;
+    }
+
+    :-moz-any-link:focus {
+        outline: none;
+    }
+
+    .post-body {
+        margin: 3vw;
+        word-wrap: break-word;
+        word-break: keep-all;
+        user-select: text;
+    }
+
+    .post-body-heading {
+        font-size: 1.5em;
+        padding-bottom: 2vw;
+        border-bottom: 1px solid rgba(132, 143, 165, 0.3);
+    }
+
+    .post-body-date {
+        font-size: 12px;
+        color: rgba(132, 143, 165, 0.6);
+        display: flex;
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    @media screen and (max-width: 992px) and (min-width: 300px) {
+        .log-btn {
+            position: relative;
+            padding: 10px;
+        }
+    }
+</style>
+
+{% block content %} 
+    {% if error %}
+    {{error}}
+    {% else %}
+    <div class="header mt-5">
+        <h1>Today's feed</h1>
+    </div>
+    <div class="feed-wrapper container-fluid">
+        <div class="contents-left">
+            <h1>Your Posts</h1>
+            <br>
+        </div>
+    {% for post in posts %}
+    <div class="feed">
+        <div class="post-wrapper">
+            <div class="post">
+                <div class="post-header">
+                    <a href="#" class="post-profile">
+                        <!-- fix this shit later -->
+                        {% with post.user_profile.picture.url|from_index:7 as source %}
+                        <img
+                            class="post-user-profilepic m-2"
+                            src="{% static source %}"
+                            alt="profile_pic"
+                            id="profile_pic"
+                        />
+                        {% endwith %}
+                        <label class="post-username" for="profile_pic">{{post.user_profile.user.username}}</label>
+                    </a>
+                    <!-- <a class="post-like p-2" href="#liked">
+          <i class="material-icons">favorite_border</i>
+        </a>
+        <a class="post-comment p-2" href="#commented">
+          <i class="material-icons">chat_bubble_outline</i>
+        </a>-->
+                </div>
+                <div class="post-body">
+                    <p class="post-body-heading">
+                        {{ post.header }}
+                    </p>
+                    <p class="post-body-text">
+                        {{ post.text }}
+                    </p>
+                    <p class="post-body-link">
+                        <a href="{{post.link}}">{{ post.link }}</a>
+                    </p>
+                    <p class="post-body-date">
+                        {{ post.timestamp }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    <div class="contents-left">
+        <h1>Other Posts</h1>
+        <br>
+    </div>
+    {% for post in followers_posts %}
+    <div class="feed">
+        <div class="post-wrapper">
+            <div class="post">
+                <div class="post-header">
+                    <a href="#" class="post-profile">
+                        <!-- fix this shit later -->
+                        {% with post.user_profile.picture.url|from_index:7 as source %}
+                        <img
+                            class="post-user-profilepic m-2"
+                            src="{% static source %}"
+                            alt="profile_pic"
+                            id="profile_pic"
+                        />
+                        {% endwith %}
+                        <label class="post-username" for="profile_pic">{{post.user_profile.user.username}}</label>
+                    </a>
+                    <!-- <a class="post-like p-2" href="#liked">
+          <i class="material-icons">favorite_border</i>
+        </a>
+        <a class="post-comment p-2" href="#commented">
+          <i class="material-icons">chat_bubble_outline</i>
+        </a>-->
+                </div>
+                <div class="post-body">
+                    <p class="post-body-heading">
+                        {{ post.header }}
+                    </p>
+                    <p class="post-body-text">
+                        {{ post.text }}
+                    </p>
+                    <p class="post-body-link">
+                        <a href="{{post.link}}">{{ post.link }}</a>
+                    </p>
+                    <p class="post-body-date">
+                        {{ post.timestamp }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %} 
+    {% endif %}
+</div>
+
+{% endblock content %}
+
+<!--
+<div class="post">
+                    <div class="post-header">
+                        <a href="#profile" class="post-profile">
+                            <img
+                                class="post-user-profilepic m-2"
+                                src="{{ UserProfile.profile_picture.url }}"
+                                alt="profile_pic"
+                                id="profile_pic"
+                            />
+                            <label class="post-username" for="profile_pic"
+                                >{{ User.username }}
+                            </label>
+                        </a>
+                        <a class="post-like p-2" href="#liked">
+                            <i class="material-icons">favorite_border</i>
+                        </a>
+                        <a class="post-comment p-2" href="#commented">
+                            <i class="material-icons">chat_bubble_outline</i>
+                        </a>
+                    </div>
+                    <div class="post-body">
+                        <p class="post-body-heading">
+                            This is a post made by user 2.9 This post is damn
+                            dumb to be honesht
+                        </p>
+                        <p class="post-body-text">
+                            Lorem Ipsum is simply dummy text of the printing and
+                            typesetting industry. Lorem Ipsum has been the
+                            industry's standard dummy text ever since the 1500s,
+                            when an unknown printer took a galley of type and
+                            scrambled it to make a type specimen book. It has
+                            survived not only five centuries, but also the leap
+                            into electronic typesetting, remaining essentially
+                            unchanged.
+                            <br />
+                            It was popularised in the 1960s with the release of
+                            Letraset sheets containing Lorem Ipsum passages, and
+                            more recently with desktop publishing software like
+                            Aldus PageMaker including versions of Lorem Ipsum.
+                            There are many variations of passages of Lorem Ipsum
+                            available, but the majority have suffered alteration
+                            in some form, by injected humour, or randomised
+                            words which don't look even slightly believable. If
+                            you are going to use a passage of
+                            <br />
+                            Lorem Ipsum, you need to be sure there isn't
+                            anything embarrassing hidden in the middle of text.
+                            All the Lorem Ipsum generators on the Internet tend
+                            to repeat predefined chunks as necessary, making
+                            this the first true generator on the Internet. It
+                            uses a dictionary of over 200 Latin words, combined
+                            with a handful of model sentence structures, to
+                            generate Lorem Ipsum which looks reasonable. The
+                            generated Lorem Ipsum is therefore always free from
+                            repetition, injected humour, or non-characteristic
+                            words etc. Lorem Ipsum is simply dummy text of the
+                            printing and typesetting industry. Lorem Ipsum has
+                            been the industry's standard dummy text ever since
+                            the 1500s, when an unknown printer took a galley of
+                            type and scrambled it to make a type specimen book.
+                            It has survived not only five centuries, but also
+                            the leap into electronic typesetting, remaining
+                            essentially unchanged.
+                            <br />
+                            It was popularised in the 1960s with the release of
+                            Letraset sheets containing Lorem Ipsum passages, and
+                            more recently with desktop publishing software like
+                            Aldus PageMaker including versions of Lorem Ipsum.
+                            There are many variations of passages of Lorem Ipsum
+                            available, but the majority have suffered alteration
+                            in some form, by injected humour, or randomised
+                            words which don't look even slightly believable. If
+                            you are going to use a passage of
+                            <br />
+                            Lorem Ipsum, you need to be sure there isn't
+                            anything embarrassing hidden in the middle of text.
+                            All the Lorem Ipsum generators on the Internet tend
+                            to repeat predefined chunks as necessary, making
+                            this the first true generator on the Internet. It
+                            uses a dictionary of over 200 Latin words, combined
+                            with a handful of model sentence structures, to
+                            generate Lorem Ipsum which looks reasonable. The
+                            generated Lorem Ipsum is therefore always free from
+                            repetition, injected humour, or non-characteristic
+                            words etc.
+                        </p>
+                        <p class="post-body-date">
+                            Date Created : 17/2/18
+                        </p>
+                    </div>
+                </div>
+            </div>-->

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+{% extends 'base.html' %} 
+{% load static from staticfiles %} {% load from_index %}
+{% block title %} Search {% endblock title %}
+{% block style %}
+* {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        outline: none;
+    }
+
+    .navbar {
+        border-bottom: 3px solid #2c4251;
+    }
+
+    .navbar-brand {
+        color: #080708;
+        font-family: "ZCOOL KuaiLe", cursive;
+        font-size: 1.5rem;
+    }
+
+    .navbar-toggler {
+        border: none;
+        outline: none;
+    }
+
+    .navbar-toggler-icon {
+        cursor: pointer;
+    }
+
+    .nav-item {
+        color: #080708;
+        padding: 2px;
+    }
+
+    .log-btn {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+    }
+
+    .feed-wrapper {
+        margin-top: 5vw;
+    }
+
+    .header {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 3vw;
+    }
+
+    .post {
+        border: 2px solid #2c4251;
+        box-shadow: 0 3px 6px 0 rgba(172, 203, 225, 1);
+        border-radius: 5px;
+        margin-bottom: 3vw;
+    }
+
+    .post-header {
+        border-bottom: 2px solid #2c4251;
+    }
+
+    .post-profile {
+        text-decoration: none;
+        color: #2c4251;
+    }
+
+    .post-profile:hover {
+        text-decoration: none;
+        color: #2c4251;
+    }
+
+    .post-profile:focus {
+        text-decoration: none;
+        color: #2c4251;
+    }
+
+    .post-profile:active {
+        text-decoration: none;
+        color: #2c4251;
+    }
+
+    .post-username {
+        user-select: none;
+        font-size: 0.9em;
+        word-wrap: break-word;
+        word-break: break-all;
+    }
+
+    .post-username:hover {
+        cursor: pointer;
+    }
+
+    .post-user-profilepic {
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        border: 2px solid #848fa5;
+    }
+    .post-like {
+        border: none;
+        margin: none;
+        background-color: transparent;
+        float: right;
+        outline: none;
+        text-decoration: none;
+        color: black;
+    }
+
+    .post-comment {
+        border: none;
+        margin: none;
+        background-color: transparent;
+        float: right;
+        text-decoration: none;
+        color: black;
+    }
+
+    :-moz-any-link:focus {
+        outline: none;
+    }
+
+    .post-body {
+        margin: 3vw;
+        word-wrap: break-word;
+        word-break: keep-all;
+        user-select: text;
+    }
+
+    .post-body-heading {
+        font-size: 1.5em;
+        padding-bottom: 2vw;
+        border-bottom: 1px solid rgba(132, 143, 165, 0.3);
+    }
+
+    .post-body-date {
+        font-size: 12px;
+        color: rgba(132, 143, 165, 0.6);
+        display: flex;
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .footer {
+        width: 100%;
+        border-top: 5px solid #2c4251;
+        background-color: #080708;
+        color: #f0eff4;
+        padding: 1vw;
+        display: flex;
+        justify-content: center;
+        align-items:center;
+    }
+
+    .search-results{
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .search-user{
+        border: 2px solid #2c4251;
+        box-shadow: 0 3px 6px 0 rgba(172, 203, 225, 1);
+        border-radius: 5px;
+        margin-bottom: 3vw;
+        display:flex;
+        flex-direction:column;
+        justify-content: center;
+        align-items:center;
+    }
+
+    .profile-link{
+        text-decoration:none;
+        color:black;
+        font-size: 1.1em;
+    }
+
+    .profile-link:hover{
+        text-decoration:none;
+        color:blue;
+    }
+    .post-user-profilepic {
+        border-radius: 50%;
+        width: 10vw;
+        height: 10vw;
+        border: 2px solid #848fa5;
+    }
+    @media screen and (max-width: 992px) and (min-width: 300px) {
+        .log-btn {
+            position: relative;
+            padding: 10px;
+        }
+        .search-results{
+            display: grid;
+            grid-template-columns: repeat(auto, 1fr);
+        }
+
+        .search-user{
+            border: 2px solid #2c4251;
+            box-shadow: 0 3px 6px 0 rgba(172, 203, 225, 1);
+            border-radius: 5px;
+            margin-bottom: 3vw;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+        }
+
+        .post-user-profilepic {
+            border-radius: 50%;
+            width: 20vw;
+            height: 20vw;
+            border: 2px solid #848fa5;
+        }
+    }
+{% endblock style %}
+    
+
+
+        
+
+{% block content %}
+    <div class="container-fluid">
+        <form method="POST" class="input-group w-75 mx-auto m-3">
+            {% csrf_token %}
+                <input type="text" name="search" placeholder="Search Username" class="form-control">
+                <div class="input-group-append"><button type="submit" class="btn btn-info "><i class="fa fa-search" aria-hidden="true"></i>Search</button></div>
+        </form>
+        <div class="search-results-header">
+            <h1>Search Results :</h1>
+        </div>
+        <div class="search-results m-5">
+            {% for user in users %}
+                <div class="search-user text-center m-3 p-3">
+                    {% with user.picture.url|from_index:7 as source %}
+                            <img
+                                class="post-user-profilepic m-2"
+                                src="{% static source %}"
+                                alt="profile_pic"
+                                id="profile_pic"
+                            />
+                    {% endwith %}
+                    {% with user.user.username as username %}
+                        <a href="{% url 'userprofile' username=username %}" class="profile-link m-2">@{{ user.user.username }}</a>
+                    {% endwith %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type='text' name='username' value={{user.user.username}} hidden>
+                        {% if user.id in following_users %}
+                            <input type='text' name='unfollow' value='' hidden>
+                            <a
+                                data-toggle="tooltip"
+                                title="UnPalm Me"
+                                name="unfollow"
+                            >
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="material-icons">
+                                        pan_tool
+                                    </i>
+                                </button>
+                            </a>
+                        {% else %}
+                            <input type='text' name='follow' value='' hidden>
+                            <a
+                                data-toggle="tooltip"
+                                title="Palm Me"
+                                name="follow"
+                            >
+                                <button type="submit" class="btn btn-info">
+                                    <i class="material-icons">
+                                        pan_tool
+                                    </i>
+                                </button>
+                            </a>
+                        
+                        {% endif %}
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <br>
+    <br>
+{% endblock content %}
+    

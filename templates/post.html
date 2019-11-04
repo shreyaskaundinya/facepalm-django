@@ -1,0 +1,89 @@
+{% extends 'base.html' %} 
+{% load from_index %} 
+{% load static from staticfiles %}
+{% block title %} POST {%endblock title %}
+
+{% block content %} 
+    <div class='container-fluid'>
+        <form action="#" method="POST">
+            {%csrf_token%}
+            <br>
+            <div class="w-50 mx-auto row-2">
+                <select
+                    class="form-control select col"
+                    required
+                    name="posttype"
+                >
+                    <option value="private">PRIVATE</option>
+                    <option value="public">PUBLIC</option>
+                </select>
+            </div>
+            <br />
+            <div class="w-50 mx-auto my-top row-2">
+                <select
+                    class="form-control select col"
+                    required
+                    name="posttopic"
+                >
+                    <option value="none" hidden>POST TOPIC</option>
+                    <option value="music">MUSIC</option>
+                    <option value="sc_tch">SCIENCE AND TECH</option>
+                    <option value="sports">SPORTS</option>
+                    <option value="business">BUSINESS </option>
+                    <option value="crnt_affrs">CURRENT AFFAIRS</option>
+                    <option value="life">LIFESTYLE</option>
+                    <option value="gaming">GAMING</option>
+                    <option value="literature">LITERATURE</option>
+                    <option value="edu">EDUCATION</option>
+                    <option value="nature">NATURE</option>
+                </select>
+            </div>
+            <br />
+
+            <div class="col m-2">
+                <input
+                    type="text"
+                    name="header"
+                    id="header"
+                    class="form-control"
+                    placeholder="Enter Title"
+                />
+            </div>
+            <br />
+            <div class="col m-2">
+                <input
+                    type="text"
+                    name="link"
+                    id="link"
+                    class="form-control"
+                    placeholder="Link ""
+                />
+        
+            </div>
+            <br/>
+            <div class="form-group col m-2">
+                <textarea
+                    rows="10"
+                    col s="4"
+                    id="cptn"
+                    name="text"
+                    class="form-control"
+                    placeholder="Type something here..."
+                ></textarea>
+            </div>
+            <div class="mb-2">
+                <button type="submit" class="btn btn-primary btn-block" >
+                    Shake <i class="fas fa-handshake"></i>
+                </button>
+            </div>
+            <!--<input
+            type="file"
+            class="form-control-file"
+            name="pic_inp"
+            accept="image/*"
+        />-->
+
+            <!--change-->
+        </form>
+    </div>
+{% endblock content %}
