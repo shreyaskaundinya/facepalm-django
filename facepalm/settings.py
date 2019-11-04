@@ -25,7 +25,7 @@ SECRET_KEY = 'x7b%)9@$p@h3!r-bviufws#%x(est2ojbo$6rgsua^c=fnrw*^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['a7d1eae9.ngrok.io','localhost','127.0.0.1']
+ALLOWED_HOSTS = ['a7d1eae9.ngrok.io', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -78,10 +78,10 @@ WSGI_APPLICATION = 'facepalm.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'USER':'root',
+        'USER': 'root',
         'NAME': 'facepalm',
-        'PASSWORD':'0016',
-        'HOST':'localhost',
+        'PASSWORD': 'K03n1g53gg008',
+        'HOST': 'localhost',
     }
 }
 
@@ -123,4 +123,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 STATIC_URL = '/static/'
 #GOOGLE_RECAPTCHA_SECRET_KEY = '6LeFvbkUAAAAADXvX9Jx3gC-MZmiSAnV2FnFb02X'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]

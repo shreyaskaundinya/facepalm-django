@@ -42,9 +42,9 @@ def Login(request):
                 user_object = User.objects.get(id=user_id)
                 user_profile = u_models.UserProfile.objects.get(user=user)
                 log_login(user)
-                if user_object.is_active == False:
-                    user_object.is_active = True
-                    user_object.save()
+                if user_profile.is_active == False:
+                    user_profile.is_active = True
+                    user_profile.save()
                     log_login(user)
                     return render(request, 'profile.html', {'data': 'Account has been reactivated'})
                 else:
@@ -252,10 +252,10 @@ def Settings(request):
                 return render(request, 'settings.html', {'password_error': 'Passwords dont match.'})
         if "deactivate_account" in data.keys():
             old_passworddeactiv = data['deactivate_password']
-            if check_password(old_password, user_object.password):
-                user_object.is_active = False
-                user_object.save()
-                return redirect('login')
+            if check_password(old_passworddeactiv, user_object.password):
+                user_profile.is_active = False
+                user_profile.save()
+                return redirect('logout')
             else:
                 return render(request, 'settings.html', {'password_error': 'Current password entered is wrong.'})
         if "delete_account" in data.keys():

@@ -168,7 +168,7 @@
         <div class="post-wrapper">
             <div class="post">
                 <div class="post-header">
-                    <a href="#" class="post-profile">
+                    <a href="{% url 'profile' %}" class="post-profile">
                         <!-- fix this shit later -->
                         {% with post.user_profile.picture.url|from_index:7 as source %}
                         <img
@@ -214,7 +214,7 @@
         <div class="post-wrapper">
             <div class="post">
                 <div class="post-header">
-                    <a href="#" class="post-profile">
+                    <a href="{% url 'userprofile' username=post.user_profile.user.username %}" class="post-profile">
                         <!-- fix this shit later -->
                         {% with post.user_profile.picture.url|from_index:7 as source %}
                         <img
